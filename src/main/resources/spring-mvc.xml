@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--组件扫描-->
+    <context:component-scan base-package="com.se.controller"/>
+
+    <!--mvc注解驱动-->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!--内部资源视图解析器-->
+    <bean id="resourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/webapp/"></property>
+        <property name="suffix" value=".html"></property>
+    </bean>
+
+    <!--开放静态资源访问权限-->
+    <mvc:default-servlet-handler/>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--配置哪些资源排除拦截操作-->
+            <mvc:exclude-mapping path="/login.html"/>
+            <mvc:exclude-mapping path="/users/login"/>
+            <bean class="com.se.interceptor.PrivilegeInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

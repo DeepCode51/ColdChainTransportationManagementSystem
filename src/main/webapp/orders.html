@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <link href="css/jquery.datetimepicker.css" rel="stylesheet">
+  <style>
+    .btn-primary {
+      background-color: #46a1f7;
+    }
+  </style>
+</head>
+
+<body>
+<!-- 创建物流模态开始 -->
+<div class="modal fade" id="add_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <h4>创建物流信息</h4>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="log_id">物流号：</label>
+            <div class="col-md-9">
+              <input class="form-control" id="log_id" readonly="true" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="path">线路名称：</label>
+            <div class="col-md-9">
+              <select class="form-control" id="path">
+              </select>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="car_num">车牌号：</label>
+            <div class="col-md-9">
+              <select class="form-control" id="car_num">
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="add_logBtn" type="button" value="提交"/>
+        <input class="btn btn-danger" data-dismiss="modal" type="button" value="关闭"/>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 创建物流模态框结束 -->
+
+<!--订单详情模态开始-->
+<div class="modal fade" id="query_modal">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>订单信息详情</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>订单号</th>
+              <th>寄件人地址</th>
+              <th>寄件人电话</th>
+              <th>收件人地址</th>
+              <th>收件人电话</th>
+              <th>重量</th>
+              <th>订单金额</th>
+            </tr>
+            </thead>
+            <tbody id="tbody_query"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--订单详情模态结束-->
+
+<!-- 用户创建订单模态开始 -->
+<div class="modal fade" id="add_modal_user">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>创建订单信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_consignee"
+            >收货人：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_consignee" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_con_address"
+            >收货地址：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_con_address" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_con_phone"
+            >收货人电话：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_con_phone" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_type"
+            >货物类型：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_type" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_weight"
+            >重量：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_weight" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_ord_money"
+            >订单费用：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_ord_money" type="text"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="add_ordBtn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 用户创建订单模态框结束 -->
+
+<div class="container-fluid mx-auto d-grid">
+  <div class="page-header m-4">
+    <h3>订单信息管理</h3>
+  </div>
+  <hr/>
+  <div class="">
+    <div class="row">
+      <!-- 筛选货物类型 -->
+      <div class="col-md-3 admin">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <select class="form-control" id="type">
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="typeBtn" type="button" value="筛选"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1 admin"></div>
+      <!-- 筛选时间 -->
+      <div class="col-md-6 admin">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <input autocomplete="off" class="form-control" id="startTime" placeholder="请输入开始时间" type="text"/>
+              </div>
+              <div class="col-md-6">
+                <input autocomplete="off" class="form-control" id="endTime" placeholder="请输入结束时间" type="text"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="timeBtn" type="button" value="筛选"/>
+          </div>
+        </div>
+      </div>
+      <!--  用户界面的创建订单按钮-->
+      <div class="col-md-2 user">
+        <input
+                class="btn btn-primary"
+                data-backdrop="static"
+                data-target="#add_modal_user"
+                data-toggle="modal"
+                type="button"
+                value="创建订单"
+        />
+      </div>
+    </div>
+  </div>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>订单号</th>
+      <th>寄件人</th>
+      <th>收件人</th>
+      <th>添加时间</th>
+      <th>货物类型</th>
+      <th>订单状态</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+    <span id="noFindMsg"></span>
+    </tbody>
+  </table>
+</div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/jquery.datetimepicker.js"></script>
+<script>
+    $(function () {
+        //给开始时间绑定日历框
+        $("#startTime").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i:s',
+            formatDate: 'Y-m-d H:i:s',
+            step: 1
+        });
+
+        //给结束时间绑定日历框
+        $('#endTime').datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i:s',
+            formatDate: 'Y-m-d H:i:s',
+            step: 1
+        });
+
+        //页面加载触发事件，显示所有订单信息
+        if ($.cookie('role') == '管理员') {
+            $('.user').css('display', 'none')
+            $.ajax({
+                url: "/orders/queryOrders",
+                type: "post",
+                data: {
+                    role: $.cookie('role'),
+                    username: $.cookie('username')
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindMsg').text('');
+                    if (data.length == 0){
+                        $('#noFindMsg').text("暂无订单信息")
+                    }else {
+                        for (let orders of data) {
+                            let td;
+                            td = '<td id="current_id">' + orders.id + '</td>' +
+                                '<td>' + orders.users.username + '</td>' +
+                                '<td>' + orders.consignee + '</td>' +
+                                '<td>' + orders.time + '</td>' +
+                                '<td>' + orders.type + '</td>' +
+                                '<td>' + orders.ord_state + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" data-target="#query_modal"' +
+                                ' onclick="query_info(this)">订单详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-success" data-backdrop="static" data-toggle="modal" data-target="#add_modal"' +
+                                ' onclick="add_logistics(this)">创建物流</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        } else {
+            $('.admin').css('display', 'none')
+            $.ajax({
+                url: "/orders/queryOrders",
+                type: "post",
+                data: {
+                    role: $.cookie('role'),
+                    username: $.cookie('username')
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindInfo').text('')
+                    if (data.length == 0){
+                        $('#noFindInfo').text('暂无订单信息')
+                    }else {
+                        for (let orders of data) {
+                            let td;
+                            td = '<td id="current_id">' + orders.id + '</td>' +
+                                '<td>' + orders.users.username + '</td>' +
+                                '<td>' + orders.consignee + '</td>' +
+                                '<td>' + orders.time + '</td>' +
+                                '<td>' + orders.type + '</td>' +
+                                '<td>' + orders.ord_state + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" data-target="#query_modal"' +
+                                ' onclick="query_info(this)">订单详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-danger delOrdBtn">删除订单</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        }
+
+        //页面加载时触发事件，显示所有的订单货物类型
+        $.ajax({
+            url: "orders/queryOrdersType",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#type').empty();
+                $('#type').append('<option disabled selected hidden>选择货物类型</option>');
+                $('#type').append('<option value="all">所有</option>');
+                for (let orders of data) {
+                    $('#type').append('<option value="' + orders.type + '">' + orders.type + '</option>')
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //页面加载触发事件，请求所有车牌号
+        $.ajax({
+            url: "/cars/queryCars",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#car_num').empty();
+                for (let cars of data) {
+                    let option;
+                    option = '<option value="' + cars.car_num + '">' + cars.car_num + '</option>';
+                    $('#car_num').append(option);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //页面加载获得触发事件，请求所有的路线名
+        $.ajax({
+            url: "/paths/queryPaths",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#path').empty();
+                for (let paths of data) {
+                    let option;
+                    option = '<option value = "' + paths.path + '">' + paths.path + '</option>';
+                    $('#path').append(option);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //点击添加物流模块的提交按钮触发事件，向数据库中提交
+        $('#add_logBtn').on('click', function () {
+            $.ajax({
+                url: "/logistics/addLogistics",
+                type: "post",
+                data: {
+                    ord_id: $('#log_id').val(),
+                    path: $('#path').val(),
+                    car_num: $('#car_num').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert("添加成功");
+                        $("#add_modal").modal('hide');
+                        $(location).attr("href","orders.html");
+                    } else {
+                        alert("添加失败")
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击筛选符合类型的订单信息
+        $('#typeBtn').on('click', function () {
+            $.ajax({
+                url: "/orders/queryOrdersByType",
+                type: "post",
+                data: {
+                    type: $('#type>option:selected').val(),
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindMsg').text('');
+                    if (data.length == 0){
+                        $('#noFindMsg').text("暂无符合条件的订单信息")
+                    }else {
+                        for (let orders of data) {
+                            let td;
+                            td = '<td id="current_id">' + orders.id + '</td>' +
+                                '<td>' + orders.users.username + '</td>' +
+                                '<td>' + orders.consignee + '</td>' +
+                                '<td>' + orders.time + '</td>' +
+                                '<td>' + orders.type + '</td>' +
+                                '<td>' + orders.ord_state + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" data-target="#query_modal"' +
+                                ' onclick="query_info(this)">订单详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-success" data-backdrop="static" data-toggle="modal" data-target="#add_modal"' +
+                                ' onclick="add_logistics(this)">创建物流</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击筛选创建时间符合条件的订单
+        $('#timeBtn').on('click', function () {
+            $.ajax({
+                url: "/orders/queryOrdersByTime",
+                type: "post",
+                data: {
+                    startTime: $('#startTime').val(),
+                    endTime: $('#endTime').val(),
+                    role: $.cookie('role'),
+                    username: $.cookie('username')
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindMsg').text('');
+                    if (data.length == 0) {
+                        $('#noFindMsg').text("没有符合条件的订单")
+                    } else {
+                        for (let orders of data) {
+                            let td;
+                            td = '<td id="current_id">' + orders.id + '</td>' +
+                                '<td>' + orders.users.username + '</td>' +
+                                '<td>' + orders.consignee + '</td>' +
+                                '<td>' + orders.time + '</td>' +
+                                '<td>' + orders.type + '</td>' +
+                                '<td>' + orders.ord_state + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" data-target="#query_modal"' +
+                                ' onclick="query_info(this)">订单详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-success" data-backdrop="static" data-toggle="modal" data-target="#add_modal"' +
+                                ' onclick="add_logistics(this)">创建物流</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //用户创建订单模块
+        $('#add_ordBtn').on('click', function () {
+            $.ajax({
+                url: "/orders/addOrdersByUser",
+                type: "post",
+                data: {
+                    consignee: $('#add_consignee').val(),
+                    con_address: $('#add_con_address').val(),
+                    con_phone: $('#add_con_phone').val(),
+                    type: $('#add_type').val(),
+                    weight: $('#add_weight').val(),
+                    ord_money: $('#add_ord_money').val(),
+                    username: $.cookie('username')
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert('创建订单成功')
+                        $('#add_modal_user').modal('hide')
+                        $(location).attr('href', 'orders.html')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //用户将自己创建的订单删除掉
+        $(document).on('click', '.delOrdBtn', function () {
+            let id = $(this).parents('tr').find('td:first').text()
+            console.log(id)
+            //先判断订单的状态，只有用户创建状态的订单才可以删除
+            $.ajax({
+                url: "/orders/queryOrdersById",
+                type: "post",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.ord_state == "用户创建") {
+                        $.ajax({
+                            url: "/orders/delOrdersById",
+                            type: "post",
+                            data: {
+                                id: id
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                //console.log(data);
+                                if (data.includes("true")) {
+                                    alert("删除成功")
+                                    $(location).attr('href', 'orders.html')
+                                } else {
+                                    alert("删除失败")
+                                }
+                            },
+                            error: function () {
+                                alert("出错了");
+                            }
+                        });
+                    } else {
+                        alert("该订单已形成物流，不可删除")
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+    })
+
+    //点击事件触发请求，获取当前行的订单id,发送请求从数据库拿符合条件的数据，显示到详情弹出模态
+    function query_info(obj) {
+        let id = $(obj).parent('td').parent('tr').find('#current_id').text()
+        $.ajax({
+            url: "/orders/queryOrdersById",
+            type: "post",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#tbody_query').empty();
+                let td;
+                td = '<td>' + data.id + '</td>' +
+                    '<td>' + data.users.address + '</td>' +
+                    '<td>' + data.users.phone + '</td>' +
+                    '<td>' + data.con_address + '</td>' +
+                    '<td>' + data.con_phone + '</td>' +
+                    '<td>' + data.weight + '</td>' +
+                    '<td>' + data.ord_money + '</td>';
+                $('#tbody_query').append('<tr>' + td + '</tr>');
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+    }
+
+    //点击事件获取订单号，点击之后回写订单号
+    function add_logistics(obj) {
+        let id = $(obj).parent('td').parent('tr').find('#current_id').text()
+        $('#log_id').val(id);
+    }
+</script>
+</body>
+
+</html>

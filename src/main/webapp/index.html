@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>冷链运输管理系统</title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <link href="css/index.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container-fluid">
+  <!--头部信息栏-->
+  <div class="row mb-2" id="header">
+    <div class="col-md-10"><h4>冷链运输管理系统</h4></div>
+    <div class="col-md-2 text-center">
+      <div class="dropdown">
+        <a
+                class="dropdown-toggle"
+                data-toggle="dropdown"
+                href="#"
+                id="currentUser"
+        >
+          admin</a
+        >
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" id="del">用户注销</a></li>
+          <li><a class="dropdown-item" href="#" id="quit">退出登录</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2 text-center" id="main">
+    <!--左边导航栏-->
+    <div class="col-md-2 border rounded rounded-end">
+      <nav class="navbar" id="navbar">
+        <ul class="navbar-nav flex-column">
+          <!-- 管理员模块侧边栏开始 -->
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">首页</a>
+          </li>
+          <li class="nav-item admin">
+            <a class="nav-link" href="#" id="users">用户信息管理</a>
+          </li>
+          <li class="nav-item admin">
+            <a class="nav-link" href="#" id="orders">订单信息管理</a>
+          </li>
+          <li class="nav-item admin">
+            <a class="nav-link" href="#" id="paths">线路信息管理</a>
+          </li>
+          <li class="nav-item admin">
+            <a class="nav-link" href="#" id="cars">车辆信息管理</a>
+          </li>
+          <li class="nav-item admin">
+            <a class="nav-link" href="#" id="logistics">物流信息管理</a>
+          </li>
+          <li class="nav-item dropdown admin">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+              账单信息管理</a>
+            <ul class="dropdown-menu text-center">
+              <li>
+                <a class="dropdown-item" data-stopPropagation="true" href="#" id="bills">账单信息</a>
+              </li>
+              <li>
+                <a class="dropdown-item" data-stopPropagation="true" href="#" id="statistics">统计分析</a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- 用户模块侧边栏开始 -->
+          <li class="nav-item user">
+            <a class="nav-link" href="#" id="users_user">个人信息管理</a>
+          </li>
+          <li class="nav-item user">
+            <a class="nav-link" href="#" id="orders_user">订单信息管理</a>
+          </li>
+          <li class="nav-item user">
+            <a class="nav-link" href="#" id="logistics_user">物流信息管理</a>
+          </li>
+          <!-- 用户模块侧边栏结束 -->
+        </ul>
+      </nav>
+    </div>
+    <!--右边内容区-->
+    <div class="col-md-10 embed-responsive embed-responsive-21by9">
+      <iframe
+              allowfullscreen
+              class="embed-responsive-item"
+              id="page"
+              src=""
+      ></iframe>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <footer class="panel-footer col-md-12">
+      <div class="containexr-fluid">
+        <hr/>
+        <div class="row justify-content-md-center">
+          <div class="col-md-3 text-center">
+            <a href="#">关于我们</a>
+          </div>
+          <div class="col-md-3 text-center">
+            <a href="#">联系方式</a>
+          </div>
+          <div class="col-md-3 text-center">
+            <a href="#">版权所有</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/jquery.session.js"></script>
+<script>
+    $(function () {
+        $("#currentUser").text($.cookie("username"));
+        //设置默认home.html
+        $('#page').attr('src', 'home.html')
+        $('#users').on('click', function () {
+            $('#page').attr('src', 'users.html')
+        })
+        $('#orders').on('click', function () {
+            $('#page').attr('src', 'orders.html')
+        })
+        $('#cars').on('click', function () {
+            $('#page').attr('src', 'cars.html')
+        })
+        $('#logistics').on('click', function () {
+            $('#page').attr('src', 'logistics.html')
+        })
+        $('#paths').on('click', function () {
+            $('#page').attr('src', 'paths.html')
+        })
+        $('#bills').on('click', function (e) {
+            $('#page').attr('src', 'bills.html')
+            //阻止下拉菜单自动收起
+            e.stopPropagation()
+        })
+        $('#statistics').on('click', function (e) {
+            $('#page').attr('src', 'statistics.html')
+            e.stopPropagation()
+        })
+
+        //用户模块跳转
+        $('#users_user').on('click', function () {
+            $('#page').attr('src', 'users.html')
+        })
+        $('#orders_user').on('click', function () {
+            $('#page').attr('src', 'orders.html')
+        })
+        $('#logistics_user').on('click', function () {
+            $('#page').attr('src', 'logistics.html')
+        })
+
+        //判断登录的角色是用户还是管理员
+        if ($.cookie('role') == '管理员') {
+            $('.user').css('display', 'none');
+        } else {
+            $('.admin').css('display', 'none');
+        }
+
+        //退出登录
+        $('#quit').on('click', function () {
+            var bool = confirm("是否退出登录？");
+            if (bool) {
+                $.cookie("username", null);
+                $.session.remove("users");
+                $('#quit').attr("href", 'login.html');
+            }
+        });
+        $("#del").on('click', function () {
+            var bool = confirm("是否注销账户？")
+            if (bool) {
+                $.ajax({
+                    url: "/users/delUserByUsername",
+                    data: {
+                        username: $.cookie("username"),
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.includes('true')) {
+                            alert("注销成功，谢谢您的使用");
+                            $.cookie("username", null);
+                            $.session.remove("users");
+                            $('#del').attr("href", 'login.html');
+                        } else {
+                            alert("注销失败，请检查");
+                        }
+                    },
+                    error: function () {
+                        alert("出错了");
+                    }
+                });
+            }
+        })
+    })
+</script>
+</body>
+</html>

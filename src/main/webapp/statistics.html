@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container-fluid mx-auto d-grid">
+  <div class="page-header m-4">
+    <h3>统计分析</h3>
+  </div>
+  <hr/>
+  <div id="main" style="width: 100%;height: 400px;">
+  </div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/echarts.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //定义空数组接收响应的数据
+        let date = []
+        let income = []
+        let expend = []
+        //发送请求获取数据
+        $.ajax({
+            url: "/bills/queryBillsInfo",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                for (let i = 0; i < data.length; i++) {
+                    date.push(data[i].date);
+                    income.push(data[i].income);
+                    expend.push(data[i].expend);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //解决异步后发先到问题，做延时处理
+        setTimeout(() => {
+            let myChart = echarts.init(document.getElementById('main'))
+            let option = {
+                title: {
+                    text: '收入支出统计',
+                    padding: 10,
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                //图例
+                legend: {
+                    data: ['收入', '支出']
+                },
+                toolbox: {
+                    show: true, //是否显示工具箱
+                    right: 50,
+                    //要显示的工具箱内容
+                    feature: {
+                        dataView: {//数据视图
+                            show: true
+                        },
+                        restore: {//配置项还原
+                            show: true
+                        },
+                        dataZoom: {//数据区域缩放
+                            show: true
+                        },
+                        saveAsImage: {//保存为图片
+                            show: true
+                        },
+                        magicType: {//动态类型切换
+                            type: ['bar', 'line']
+                        }
+                    }
+                },
+                xAxis: {
+                    axisLine: { //坐标轴轴线相关设置
+                        lineStyle: { //坐标轴线线
+                            color: '#46a1f7',
+                            type: 'solid',
+                        }
+                    },
+                    axisTick: { //坐标轴刻度相关设置
+                        alignWithLabel: true, //可以保证刻度线和标签对齐
+                    },
+                    //X轴的数据
+                    data: date
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                dataZoom: [{
+                    type: 'inside',
+                    start: 0,
+                    end: 100
+                }, {
+                    start: 0,
+                    end: 100
+                }],
+                series: [
+                    {
+                        name: '收入',
+                        type: 'line',
+                        data: income,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: '支出',
+                        type: 'line',
+                        data: expend,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }, 100);
+    })
+
+</script>
+</body>
+</html>

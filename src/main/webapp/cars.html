@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <style>
+    .btn-primary {
+      background-color: #46a1f7;
+    }
+  </style>
+</head>
+<body>
+<!-- 添加车辆模态开始 -->
+<div class="modal fade" id="add_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>添加车辆信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_car_num"
+            >车牌号：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_car_num" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_max_weight"
+            >最大载重：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_max_weight" type="text"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="addBtn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 添加车辆模态框结束 -->
+
+<!-- 修改车辆模态开始 -->
+<div class="modal fade" id="modify_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>修改车辆信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_id"
+            >车辆编号：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="modify_id" readonly="true" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_car_num"
+            >车牌号：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="modify_car_num" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_max_weight"
+            >最大载重：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_max_weight"
+                      type="text"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="modifyCarsBtn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 修改车辆模态框结束 -->
+
+<div class="container-fluid mx-auto d-grid">
+  <div class="page-header m-4">
+    <h3>车辆信息管理</h3>
+  </div>
+  <hr/>
+  <div class="">
+    <div class="row">
+      <div class="col-md-2">
+        <input
+                class="btn btn-primary"
+                data-backdrop="static"
+                data-target="#add_modal"
+                data-toggle="modal"
+                type="button"
+                value="添加车辆"
+        />
+      </div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <input
+                    aria-label="default input example"
+                    class="form-control"
+                    id="searchCar_num"
+                    placeholder="请输入车牌号"
+                    type="search"
+            />
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="searchCarNumBtn" type="button" value="搜索"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <select class="form-control" id="car_state">
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="searchCar_stateBtn" type="button" value="筛选"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th>车牌号</th>
+        <th>最大载重量</th>
+        <th>车辆状态</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="tbody">
+      <span id="noFindMsg"></span>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //页面加载时，写入数据
+        $.ajax({
+            url: "/cars/queryCars",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#tbody').empty();
+                for (let cars of data) {
+                    let td;
+                    td = '<td id="currentId">' + cars.id + '</td>' +
+                        '<td>' + cars.car_num + '</td>' +
+                        '<td>' + cars.max_weight + '</td>' +
+                        '<td>' + cars.car_state + '</td>' +
+                        '<td><button class="btn btn-success" data-backdrop="static"' +
+                        ' data-toggle="modal" data-target="#modify_modal" onclick = modifyCars(this)>修改</button>&nbsp;&nbsp;' +
+                        '<button class="btn btn-danger" onclick="deleteCars(this)">删除</button></td>';
+                    $('#tbody').append('<tr>' + td + '</tr>');
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //点击弹出修改模态的提交按钮时，修改车辆信息
+        $('#modifyCarsBtn').on('click', function () {
+            $.ajax({
+                url: "/cars/modifyCarsById",
+                type: "post",
+                data: {
+                    id: $('#modify_id').val(),
+                    car_num: $('#modify_car_num').val(),
+                    max_weight: $('#modify_max_weight').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.includes('true')) {
+                        alert('修改成功');
+                        $('#modify_modal').modal('hide');
+                        $(location).attr('href', 'cars.html');
+                    } else {
+                        alert('修改失败');
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击弹出添加模态的提价按钮，增加车辆信息
+        $('#addBtn').on('click', function () {
+            $.ajax({
+                url: "/cars/addCars",
+                type: "post",
+                data: {
+                    car_num: $('#add_car_num').val(),
+                    max_weight: $('#add_max_weight').val(),
+                    car_state: '未满载'
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert('添加成功')
+                        $('#add_modal').modal('hide')
+                        $(location).attr('href', 'cars.html')
+                    } else {
+                        alert('添加失败')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击搜索按钮，根据车牌号搜索车辆信息
+        $('#searchCarNumBtn').on('click', function () {
+            $.ajax({
+                url: "/cars/queryCarsByCar_num",
+                type: "post",
+                data: {
+                    car_num: $('#searchCar_num').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindMsg').empty();
+                    if (data.length == 0) {
+                        $('#noFindMsg').text('没有找到相关车辆信息')
+                    } else {
+                        for (let cars of data) {
+                            let td;
+                            td = '<td id="currentId">' + cars.id + '</td>' +
+                                '<td>' + cars.car_num + '</td>' +
+                                '<td>' + cars.max_weight + '</td>' +
+                                '<td>' + cars.car_state + '</td>' +
+                                '<td><button class="btn btn-success" data-backdrop="static"' +
+                                ' data-toggle="modal" data-target="#modify_modal" onclick = modifyCars(this)>修改</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-danger" onclick="deleteCars(this)">删除</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //页面加载显示所有的车辆状态信息
+        $.ajax({
+            url: "/cars/queryCarState",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#car_state').empty();
+                $('#car_state').append('<option disabled selected hidden>请选择车辆状态</option>')
+                $('#car_state').append('<option value="all">所有</option>')
+                for (let cars of data) {
+                    $('#car_state').append('<option value="' + cars.car_state + '">' + cars.car_state + '</option>')
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //点击筛选按钮，根据车辆状态筛选对应的车辆信息
+        $('#searchCar_stateBtn').on('click', function () {
+            $.ajax({
+                url: "/cars/queryCarsByCarState",
+                type: "post",
+                data: {
+                    car_state: $('#car_state>option:selected').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindMsg').empty();
+                    if (data.length == 0) {
+                        $('#noFindMsg').text('没有找到相关车辆信息')
+                    } else {
+                        for (let cars of data) {
+                            let td;
+                            td = '<td id="currentId">' + cars.id + '</td>' +
+                                '<td>' + cars.car_num + '</td>' +
+                                '<td>' + cars.max_weight + '</td>' +
+                                '<td>' + cars.car_state + '</td>' +
+                                '<td><button class="btn btn-success" data-backdrop="static"' +
+                                ' data-toggle="modal" data-target="#modify_modal" onclick = modifyCars(this)>修改</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-danger" onclick="deleteCars(this)">删除</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+    });
+
+    //点击修改按钮时将当前行的信息回写到弹出层中
+    function modifyCars(obj) {
+        let id = $(obj).parent('td').parent('tr').find('#currentId').text()
+        $.ajax({
+            url: "/cars/queryCarsById",
+            type: "post",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#modify_id').val(data.id);
+                $('#modify_car_num').val(data.car_num);
+                $('#modify_max_weight').val(data.max_weight);
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+    }
+
+    //删除当前行的车辆信息
+    function deleteCars(obj) {
+        let id = $(obj).parent('td').parent('tr').find('#currentId').text()
+        //先进行判断该车辆是否有物流在占用，如果占用，提示不能删除
+        $.ajax({
+            url: "/logistics/queryCarExist",
+            type: "post",
+            data: {
+                car_id: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                if (data.length != 0) {
+                    alert('该车辆被占用，不可删除')
+                } else {
+                    $.ajax({
+                        url: "/cars/deleteCars",
+                        type: "post",
+                        data: {
+                            id: id
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            //console.log(data);
+                            if (data.includes('true')) {
+                                alert("删除成功")
+                                $(location).attr('href', 'cars.html')
+                            } else {
+                                alert('删除失败')
+                            }
+                        },
+                        error: function () {
+                            alert("出错了");
+                        }
+                    });
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+    }
+</script>
+</body>
+</html>

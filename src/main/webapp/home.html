@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container-fluid mx-auto d-grid" style="width: 522px">
+  <h3 class="m-4">欢迎登录冷链运输管理系统，<span id="user"></span></h3>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(function () {
+        let username = $.cookie('username');
+        $('#user').text(username);
+    });
+</script>
+</body>
+</html>

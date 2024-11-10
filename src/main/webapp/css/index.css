@@ -1,0 +1,41 @@
+#header {
+    background-color: #46a1f7;
+}
+
+#header div h4,
+.dropdown #currentUser {
+    line-height: 3.5rem;
+    color: #ffffff;
+}
+
+.dropdown #currentUser {
+    text-decoration: none;
+}
+
+ul {
+    width: 100%;
+}
+
+a {
+    color: #000000;
+}
+
+a:hover {
+    color: #ffffff;
+    background-color: #46a1f7;
+    border-radius: 4px;
+}
+
+.dropdown .dropdown-menu {
+    border: 0;
+}
+
+.dropdown .dropdown-menu li a {
+    color: #000000;
+}
+
+.dropdown .dropdown-menu li a:hover {
+    color: #ffffff;
+    background-color: #46a1f7;
+    border-radius: 4px;
+}

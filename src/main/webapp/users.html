@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <style>
+    .btn-primary {
+      background-color: #46a1f7;
+    }
+  </style>
+</head>
+<body>
+<!-- 添加用户模态开始 -->
+<div class="modal fade" id="add_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>添加用户信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_username"
+            >用户名：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_username" type="text"/>
+              <span id="addusername"></span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_password"
+            >密码：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_password" type="text"/>
+              <span id="addpassword"></span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_phone"
+            >电话：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_phone" type="text"/>
+              <span id="addphone"></span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_address"
+            >住址：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="add_address" type="text"/>
+              <span id="addaddress"></span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="add_role"
+            >角色：</label
+            >
+            <div class="col-md-9">
+              <select class="form-control" id="add_role">
+                <option value="管理员">管理员</option>
+                <option value="用户">用户</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="subbtn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 添加用户模态框结束 -->
+
+<!-- 修改用户模态开始 -->
+<div class="modal fade" id="modify_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>修改用户信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_username"
+            >用户名：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_username"
+                      type="text"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_password"
+            >密码：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_password"
+                      type="text"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_phone"
+            >电话：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="modify_phone" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_address"
+            >住址：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="modify_address" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2 admin">
+            <label class="col-md-3 col-form-label" for="modify_role"
+            >角色：</label
+            >
+            <div class="col-md-9">
+              <select class="form-control" id="modify_role">
+                <option value="管理员">管理员</option>
+                <option value="用户">用户</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary update" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 修改用户模态框结束 -->
+
+<div class="container-fluid mx-auto d-grid">
+  <div class="page-header m-4">
+    <h3 class="admin">用户信息管理</h3>
+    <h3 class="user">个人信息管理</h3>
+  </div>
+  <hr/>
+  <div class="">
+    <div class="row admin">
+      <div class="col-md-2">
+        <input
+                class="btn btn-primary"
+                data-backdrop="static"
+                data-target="#add_modal"
+                data-toggle="modal"
+                type="button"
+                value="添加新用户"
+        />
+      </div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <input
+                    aria-label="default input example"
+                    class="form-control"
+                    id="username"
+                    placeholder="请输入用户名"
+                    type="search"
+            />
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="serching" type="button" value="搜索"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <select class="form-control" id="role">
+              <option value="all">所有</option>
+              <option value="管理员">管理员</option>
+              <option value="用户">用户</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="sift" type="button" value="筛选"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th>用户名</th>
+        <th>密码</th>
+        <th>电话</th>
+        <th>住址</th>
+        <th>角色</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //用户登录时隐藏某些模块
+        if ($.cookie('role') == '用户') {
+            $('.admin').css('display', 'none')
+            //获取信息
+            getAllUsersByUser();
+        } else {
+            $('.user').css('display', 'none')
+            //获取信息
+            getAllUsers();
+        }
+        //检查用户名是否合规
+        $('#add_username').blur(function () {
+            //检测用户名是否可用
+            $.ajax({
+                url: "/users/selUsername",
+                type: "post",
+                data: {
+                    username: $('#add_username').val(),
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.includes('true')) {
+                        $("#addusername").text("");
+                    } else if (data.includes('false')) {
+                        $("#addusername").text("用户名已存在").css("color", "red");
+                    } else {
+                        $("#addusername").text("您输入的有误").css("color", "red");
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            })
+        });
+        //判断密码是否为空
+        $("#add_password").blur(function () {
+            if ($("#add_password").val() == null || $("#add_password").val() == "") {
+                $("#addpassword").text("密码不能为空").css("color", "red");
+            } else {
+                $("#addpassword").text("");
+            }
+        });
+        //判断手机号是否为空
+        $("#add_phone").blur(function () {
+            if ($("#add_phone").val() != null && $("#add_phone").val() != "") {
+                let telStr = /^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/;
+                let phone = $("#add_phone").val();
+                var str;
+                if (!telStr.test(phone)) {
+                    str = "手机号不规范";
+                } else {
+                    str = "";
+                }
+            } else {
+                str = "手机号不能为空";
+            }
+            $("#addphone").text(str).css("color", "red");
+        });
+        //判断地址是否为空
+        $("#add_address").blur(function () {
+            if ($("#add_address").val() == null || $("#add_address").val() == "") {
+                $("#addaddress").text("地址不能为空").css("color", "red");
+            } else {
+                $("#addaddress").text("");
+            }
+        });
+        //注册
+        $("#subbtn").on('click', function () {
+            $.ajax({
+                url: "/users/enroll",
+                type: "post",
+                data: {
+                    username: $('#add_username').val(),
+                    password: $('#add_password').val(),
+                    phone: $("#add_phone").val(),
+                    address: $("#add_address").val(),
+                    role: $('#modify_role>option:selected').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.includes('true')) {
+                        $('#add_modal').modal("hide");
+                        alert("注册成功");
+                        $("#tbody").empty();
+                        getAllUsers();
+                    } else {
+                        $('#add_modal').modal("hide");
+                        alert("注册失败")
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+        //修改信息操作
+        $(".update").on('click', function () {
+            $.ajax({
+                url: "/users/updateUser",
+                data: {
+                    id: $.cookie("modify_id"),
+                    username: $("#modify_username").val(),
+                    password: $("#modify_password").val(),
+                    phone: $("#modify_phone").val(),
+                    address: $("#modify_address").val(),
+                    role: $("#modify_role").val()
+                },
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        $('#modify_modal').modal("hide");
+                        alert("修改成功")
+                        $("#tbody").empty();
+                        getAllUsers();
+                    } else {
+                        $('#modify_modal').modal("hide");
+                        alert("修改失败")
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+        //搜索
+        $("#serching").click(function () {
+            //获取搜索框内容
+            $.ajax({
+                url: "/users/selUserByUsername",
+                data: {
+                    username: $("#username").val(),
+                },
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    $("#tbody").empty();
+                    //console.log("搜索到的内容" + data);
+                    for (let i in data) {
+                        let tr;
+                        tr = "<td>" + data[i].id + "</td>" +
+                            "<td>" + data[i].username + "</td>" +
+                            "<td>" + data[i].password + "</td>" +
+                            "<td>" + data[i].phone + "</td>" +
+                            "<td>" + data[i].address + "</td>" +
+                            "<td>" + data[i].roles.role + "</td>" +
+                            "<td>\n" +
+                            "                <button\n" +
+                            "                  class=\"btn btn-success\"\n" +
+                            "                  data-backdrop=\"static\"\n" +
+                            "                  data-toggle=\"modal\"\n" +
+                            "                  data-target=\"#modify_modal\"\n id='update'" +
+                            "                >\n" +
+                            "                  修改\n" +
+                            "                </button>\n" +
+                            "                <button class=\"btn btn-danger del\">删除</button>\n" +
+                            "              </td>";
+                        $("#tbody").append("<tr>" + tr + "</tr>");
+                    }
+                    //绑定修改事件
+                    var btn = $(".btn-success");
+                    var del = $(".del");
+                    for (var i in btn) {
+                        btn[i].onclick = update;
+                        del[i].onclick = delUser;
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                },
+            });
+        });
+        //筛选
+        $("#sift").click(function () {
+            //获取搜索框内容
+            $.ajax({
+                url: "/users/selUserByUsers",
+                data: {
+                    username: $("#username").val(),
+                    role: $("#role>option:selected").val()
+                },
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    $("#tbody").empty();
+                    //console.log("搜索到的内容" + data);
+                    for (let i in data) {
+                        let tr;
+                        tr = "<td>" + data[i].id + "</td>" +
+                            "<td>" + data[i].username + "</td>" +
+                            "<td>" + data[i].password + "</td>" +
+                            "<td>" + data[i].phone + "</td>" +
+                            "<td>" + data[i].address + "</td>" +
+                            "<td>" + data[i].roles.role + "</td>" +
+                            "<td>\n" +
+                            "                <button\n" +
+                            "                  class=\"btn btn-success\"\n" +
+                            "                  data-backdrop=\"static\"\n" +
+                            "                  data-toggle=\"modal\"\n" +
+                            "                  data-target=\"#modify_modal\"\n id='update'" +
+                            "                >\n" +
+                            "                  修改\n" +
+                            "                </button>\n" +
+                            "                <button class=\"btn btn-danger del\">删除</button>\n" +
+                            "              </td>";
+                        $("#tbody").append("<tr>" + tr + "</tr>");
+                    }
+                    //绑定修改事件
+                    var btn = $(".btn-success");
+                    var del = $(".del");
+                    for (var i in btn) {
+                        btn[i].onclick = update;
+                        del[i].onclick = delUser;
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                },
+            });
+        });
+    });
+
+    //修改信息传入
+    function update() {
+        let tr = this.parentNode.parentNode;
+        let id = tr.children[0].innerHTML;
+        let username = tr.children[1].innerHTML;
+        let password = tr.children[2].innerHTML;
+        let phone = tr.children[3].innerHTML;
+        let address = tr.children[4].innerHTML;
+        let role = tr.children[5].innerHTML;
+        $("#modify_username").val(username);
+        $("#modify_password").val(password);
+        $("#modify_phone").val(phone);
+        $("#modify_address").val(address);
+        $("#modify_role").val(role);
+        $.cookie("modify_id", id);
+    }
+
+    //删除用户
+    function delUser() {
+        let tr = this.parentNode.parentNode;
+        let id = tr.children[0].innerHTML;
+        let username = tr.children[1].innerHTML;
+        //删除操作
+        var bool = confirm("是否删除" + username + "用户");
+        if (bool) {
+            $.ajax({
+                url: "/users/delUser",
+                data: {
+                    id: id,
+                },
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert("删除成功");
+                        $("#tbody").empty();
+                        getAllUsers();
+                    } else {
+                        $('#myModal').modal("hide");
+                        alert("删除失败");
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                },
+            });
+        }
+    }
+
+    //获取所有信息
+    function getAllUsers() {
+        //获取信息
+        $.ajax({
+            url: "/users/getAllUsers",
+            data: {
+                username: $.cookie("username"),
+                role: $.cookie("role")
+            },
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                $("#tbody").empty();
+                //console.log(data);
+                for (let i in data) {
+                    let tr;
+                    tr = "<td>" + data[i].id + "</td>" +
+                        "<td>" + data[i].username + "</td>" +
+                        "<td>" + data[i].password + "</td>" +
+                        "<td>" + data[i].phone + "</td>" +
+                        "<td>" + data[i].address + "</td>" +
+                        "<td>" + data[i].roles.role + "</td>" +
+                        "<td>\n" +
+                        "                <button\n" +
+                        "                  class=\"btn btn-success\"\n" +
+                        "                  data-backdrop=\"static\"\n" +
+                        "                  data-toggle=\"modal\"\n" +
+                        "                  data-target=\"#modify_modal\"\n id='update'" +
+                        "                >\n" +
+                        "                  修改\n" +
+                        "                </button>\n" +
+                        "                <button class=\"btn btn-danger del\">删除</button>\n" +
+                        "              </td>";
+                    $("#tbody").append("<tr>" + tr + "</tr>");
+                }
+                //绑定修改事件
+                var btn = $(".btn-success");
+                var del = $(".del");
+                for (var i in btn) {
+                    btn[i].onclick = update;
+                    del[i].onclick = delUser;
+                }
+            },
+            dataType: "json",
+            error: function () {
+                alert("出错了");
+            }
+        })
+    }
+
+    //获取当前用户信息
+    function getAllUsersByUser() {
+        //获取信息
+        $.ajax({
+            url: "/users/getAllUsers",
+            data: {
+                username: $.cookie("username"),
+                role: $.cookie("role")
+            },
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                $("#tbody").empty();
+                //console.log(data);
+                for (let i in data) {
+                    let tr;
+                    tr = "<td>" + data[i].id + "</td>" +
+                        "<td>" + data[i].username + "</td>" +
+                        "<td>" + data[i].password + "</td>" +
+                        "<td>" + data[i].phone + "</td>" +
+                        "<td>" + data[i].address + "</td>" +
+                        "<td>" + data[i].roles.role + "</td>" +
+                        "<td>\n" +
+                        "                <button\n" +
+                        "                  class=\"btn btn-success\"\n" +
+                        "                  data-backdrop=\"static\"\n" +
+                        "                  data-toggle=\"modal\"\n" +
+                        "                  data-target=\"#modify_modal\"\n id='update'" +
+                        "                >\n" +
+                        "                  修改\n" +
+                        "                </button>\n" +
+                        "              </td>";
+                    $("#tbody").append("<tr>" + tr + "</tr>");
+                }
+                //绑定修改事件
+                var btn = $(".btn-success");
+                var del = $(".del");
+                for (var i in btn) {
+                    btn[i].onclick = update;
+                    del[i].onclick = delUser;
+                }
+            },
+            dataType: "json",
+            error: function () {
+                alert("出错了");
+            }
+        })
+    }
+</script>
+</body>
+</html>

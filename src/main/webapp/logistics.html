@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <style>
+    .btn-primary {
+      background-color: #46a1f7;
+    }
+  </style>
+</head>
+<body>
+<!-- 物流详情模态开始 -->
+<div class="modal fade" id="query_modal">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>物流信息详情</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>订单号</th>
+              <th>寄件人</th>
+              <th>寄件人地址</th>
+              <th>寄件人电话</th>
+              <th>收件人</th>
+              <th>收件人地址</th>
+              <th>收件人电话</th>
+              <th>添加时间</th>
+              <th>货物类型</th>
+              <th>重量</th>
+              <th>订单金额</th>
+            </tr>
+            </thead>
+            <tbody id="tbody_query"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 物流详情模态框结束 -->
+
+<!-- 修改物流模态开始 -->
+<div class="modal fade" id="modify_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>修改物流信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_id">物流号:</label>
+            <div class="col-md-9">
+              <input class="form-control" id="modify_id" readonly="true" type="text">
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_car_num"
+            >车牌号:</label
+            >
+            <div class="col-md-9">
+              <input autocomplete="off" class="form-control" id="modify_car_num" list="datalistOptions_car_num"/>
+              <datalist id="datalistOptions_car_num">
+              </datalist>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <span class="col-md-3"></span>
+            <span class="col-md-9" id="car_num_err"></span>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_path"
+            >路线名称：</label
+            >
+            <div class="col-md-9">
+              <input autocomplete="off" class="form-control" id="modify_path" list="datalistOptions_path" type="text"/>
+              <datalist id="datalistOptions_path">
+              </datalist>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <span class="col-md-3"></span>
+            <span class="col-md-9" id="path_err"></span>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_ord_state"
+            >订单状态：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_ord_state"
+                      type="text"
+                      list="datalistOptionsOrd_state"
+              />
+              <datalist id="datalistOptionsOrd_state">
+                <option value="订单完成">
+              </datalist>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="modify_btn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 修改物流模态框结束 -->
+
+<div class="container-fluid mx-auto d-grid">
+  <div class="page-header m-4">
+    <h3 class="admin">物流信息管理</h3>
+    <h3 class="user">我的物流</h3>
+  </div>
+  <hr/>
+  <div class="">
+    <div class="row admin">
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <input
+                    aria-label="default input example"
+                    class="form-control"
+                    id="ord_id"
+                    placeholder="请输入订单号"
+                    type="search"
+            />
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="search_ord_idBtn" type="button" value="搜索"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <select class="form-control" id="ord_state">
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="search_ord_stateBtn" type="button" value="筛选"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead class="admin">
+      <tr>
+        <th>编号</th>
+        <th>订单编号</th>
+        <th>订单状态</th>
+        <th>车牌号</th>
+        <th>车辆状态</th>
+        <th>路线名称</th>
+        <th>路线费用</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <thead class="user">
+      <tr>
+        <th>编号</th>
+        <th>订单编号</th>
+        <th>订单状态</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="tbody">
+      <sapn id="emptyInfo"></sapn>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //页面刷新判断不同角色登录时的内容
+        if ($.cookie('role') == '管理员') {
+            $('.user').css('display', 'none')
+            //页面刷新触发ajax请求，加载物流信息
+            $.ajax({
+                url: "/logistics/queryAll",
+                type: "post",
+                data: {
+                    username: $.cookie('username'),
+                    ord_state: '用户创建'
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    if (data.length != 0) {
+                        for (let logistics of data) {
+                            let td;
+                            td = '<td id="current_id">' + logistics.id + '</td>' +
+                                '<td>' + logistics.orders.id + '</td>' +
+                                '<td>' + logistics.orders.ord_state + '</td>' +
+                                '<td>' + logistics.cars.car_num + '</td>' +
+                                '<td>' + logistics.cars.car_state + '</td>' +
+                                '<td>' + logistics.paths.path + '</td>' +
+                                '<td>' + logistics.paths.path_money + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" ' +
+                                'data-target="#query_modal" onclick="query_info(this)">查看详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-success" data-backdrop="static" ' +
+                                'data-toggle="modal" data-target="#modify_modal" onclick="query_info_modify(this)">修改信息</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    } else {
+                        $('#emptyInfo').text('暂无物流信息')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        } else {
+            $('.admin').css('display', 'none')
+            //页面刷新触发ajax请求，加载物流信息
+            $.ajax({
+                url: "/logistics/queryAll",
+                type: "post",
+                data: {
+                    username: $.cookie('username'),
+                    ord_state: '用户创建'
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.length != 0) {
+                        //$('#tbody').empty();
+                        for (let logistics of data) {
+                            let td;
+                            td = '<td id="current_id">' + logistics.id + '</td>' +
+                                '<td>' + logistics.orders.id + '</td>' +
+                                '<td>' + logistics.orders.ord_state + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" ' +
+                                'data-target="#query_modal" onclick="query_info(this)">查看详情</button>&nbsp;&nbsp;';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    } else {
+                        $('#emptyInfo').text('暂无物流信息')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        }
+
+        //页面加载触发事件，请求所有车牌号
+        $.ajax({
+            url: "/cars/queryCars",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#datalistOptions_car_num').empty();
+                for (let cars of data) {
+                    let option;
+                    option = '<option value="' + cars.car_num + '"></option>';
+                    $('#datalistOptions_car_num').append(option);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //页面加载获得触发事件，请求所有的路线名
+        $.ajax({
+            url: "/paths/queryPaths",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#datalistOptions_path').empty();
+                for (let paths of data) {
+                    let option;
+                    option = '<option value = "' + paths.path + '">';
+                    $('#datalistOptions_path').append(option);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //显示所有的订单状态在select中
+        $.ajax({
+            url: "/orders/queryOrdState",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#ord_state').empty();
+                $('#ord_state').append('<option disabled selected hidden>选择订单状态</option>');
+                $('#ord_state').append('<option value="all">所有</option>');
+                for (let orders of data) {
+                    let option;
+                    option = '<option value = "' + orders.ord_state + '">' + orders.ord_state + '</option>';
+                    $('#ord_state').append(option);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //鼠标按下input框清空
+        $('#modify_path').on('mousedown', function () {
+            $('#modify_path').val('');
+        });
+
+        $('#modify_car_num').on('mousedown', function () {
+            $('#modify_car_num').val('');
+        });
+
+        //验证input框中的车牌号是否是存在的
+        $('#modify_car_num').on('change', function () {
+            $.ajax({
+                url: "/cars/judgeCarNumExist",
+                type: "post",
+                data: {
+                    car_num: $('#modify_car_num').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+
+                    if (data.includes('false')) {
+                        $('#car_num_err').css('color', '#ff0000');
+                        $('#car_num_err').text('请选择正确的车牌号');
+                    } else {
+                        $('#car_num_err').text('');
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //验证路线名是否存在
+        $('#modify_path').on('change', function () {
+            $.ajax({
+                url: "/paths/judgePathsExist",
+                type: "post",
+                data: {
+                    path: $('#modify_path').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('false')) {
+                        $('#path_err').css('color', '#ff0000');
+                        $('#path_err').text('请选择正确的路线名');
+                    } else {
+                        $('#path_err').text('');
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //修改框提交事件
+        $('#modify_btn').on('click', function () {
+            $.ajax({
+                url: "logistics/modifyLogistics",
+                type: "post",
+                data: {
+                    id: $('#modify_id').val(),
+                    car_num: $('#modify_car_num').val(),
+                    path: $('#modify_path').val(),
+                    ord_state: $('#modify_ord_state').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert("修改成功");
+                        $('#modify_modal').modal('hide');
+                        $(location).attr("href", "logistics.html");
+                    } else {
+                        alert("修改失败");
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //通过订单号查询信息
+        $('#search_ord_idBtn').on('click', function () {
+            $.ajax({
+                url: "/logistics/searchLogisticsByOrdId",
+                type: "post",
+                data: {
+                    ord_id: $('#ord_id').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.length != 0) {
+                        $('#tbody').empty();
+                        $('#emptyInfo').text('')
+                        for (let logistics of data) {
+                            let td;
+                            td = '<td id="current_id">' + logistics.id + '</td>' +
+                                '<td>' + logistics.orders.id + '</td>' +
+                                '<td>' + logistics.orders.ord_state + '</td>' +
+                                '<td>' + logistics.cars.car_num + '</td>' +
+                                '<td>' + logistics.cars.car_state + '</td>' +
+                                '<td>' + logistics.paths.path + '</td>' +
+                                '<td>' + logistics.paths.path_money + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" ' +
+                                'data-target="#query_modal" onclick="query_info(this)">查看详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-success" data-backdrop="static" ' +
+                                'data-toggle="modal" data-target="#modify_modal" onclick="query_info_modify(this)">修改信息</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    } else {
+                        $('#tbody').empty();
+                        $('#emptyInfo').text('暂无物流信息')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击事件触发筛选状态事件，根据订单状态查询对应的物流信息
+        $('#search_ord_stateBtn').on('click', function () {
+            $.ajax({
+                url: "/logistics/queryLogisticsByOrdState",
+                type: "post",
+                data: {
+                    ord_state: $('#ord_state>option:selected').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#emptyInfo').text('');
+                    if (data.length != 0) {
+                        for (let logistics of data) {
+                            let td;
+                            td = '<td id="current_id">' + logistics.id + '</td>' +
+                                '<td>' + logistics.orders.id + '</td>' +
+                                '<td>' + logistics.orders.ord_state + '</td>' +
+                                '<td>' + logistics.cars.car_num + '</td>' +
+                                '<td>' + logistics.cars.car_state + '</td>' +
+                                '<td>' + logistics.paths.path + '</td>' +
+                                '<td>' + logistics.paths.path_money + '</td>' +
+                                '<td><button class="btn btn-secondary" data-toggle="modal" ' +
+                                'data-target="#query_modal" onclick="query_info(this)">查看详情</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-success" data-backdrop="static" ' +
+                                'data-toggle="modal" data-target="#modify_modal" onclick="query_info_modify(this)">修改信息</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    } else {
+                        $('#emptyInfo').text('暂无物流信息')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+    })
+
+    //点击事件触发请求获取当前行的物流id,发送请求从数据库拿符合条件的数据，显示到详情弹出模态
+    function query_info(obj) {
+        let id = $(obj).parent('td').parent('tr').find('#current_id').text()
+        $.ajax({
+            url: "/logistics/queryLogisticsById",
+            type: "post",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#tbody_query').empty();
+                for (let logistics of data) {
+                    let td;
+                    td = '<td>' + logistics.orders.id + '</td>' +
+                        '<td>' + logistics.orders.users.username + '</td>' +
+                        '<td>' + logistics.orders.users.address + '</td>' +
+                        '<td>' + logistics.orders.users.phone + '</td>' +
+                        '<td>' + logistics.orders.consignee + '</td>' +
+                        '<td>' + logistics.orders.con_address + '</td>' +
+                        '<td>' + logistics.orders.con_phone + '</td>' +
+                        '<td>' + logistics.orders.time + '</td>' +
+                        '<td>' + logistics.orders.type + '</td>' +
+                        '<td>' + logistics.orders.weight + '</td>' +
+                        '<td>' + logistics.orders.ord_money + '</td>';
+                    $('#tbody_query').append('<tr>' + td + '</tr>');
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+    }
+
+    //点击事件触发请求获取当前行的物流id，发送请求从数据库中拿到数据，显示到修改弹出模态
+    function query_info_modify(obj) {
+        let id = $(obj).parent('td').parent('tr').find('#current_id').text()
+        $.ajax({
+            url: "/logistics/queryLogisticsById",
+            type: "post",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#modify_car_num').empty();
+                $('#modify_path').empty();
+                $('#modify_ord_state').empty();
+                //给input框设置当前id对应值
+                for (var logistics of data) {
+                    $('#modify_id').val(logistics.id);
+                    $('#modify_car_num').val(logistics.cars.car_num);
+                    $('#modify_path').val(logistics.paths.path);
+                    $('#modify_ord_state').val(logistics.orders.ord_state);
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+    }
+</script>
+</body>
+</html>

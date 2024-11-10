@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <link href="css/bootstrap.css" rel="stylesheet"/>
+  <style>
+    .btn-primary {
+      background-color: #46a1f7;
+    }
+  </style>
+</head>
+<body>
+<!-- 添加线路模态开始 -->
+<div class="modal fade" id="add_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>添加线路信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="path"
+            >线路名：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="path" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="path_start"
+            >起始地：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="path_start" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="path_end"
+            >终点地：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="path_end" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="path_way"
+            >途径地：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="path_way" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="path_money"
+            >线路费用：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="path_money" type="text"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="addBtn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 添加线路信息模态框结束 -->
+
+<!-- 修改线路信息模态开始 -->
+<div class="modal fade" id="modify_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><h4>修改线路信息</h4></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_id"
+            >线路编号：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="modify_id" readonly="true" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_path"
+            >线路名：</label
+            >
+            <div class="col-md-9">
+              <input class="form-control" id="modify_path" type="text"/>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_path_start"
+            >起始地：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_path_start"
+                      type="text"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_path_end"
+            >终点地：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_path_end"
+                      type="text"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_path_way"
+            >途径地：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_path_way"
+                      type="text"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-3 col-form-label" for="modify_path_money"
+            >线路费用：</label
+            >
+            <div class="col-md-9">
+              <input
+                      class="form-control"
+                      id="modify_path_money"
+                      type="text"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <input class="btn btn-primary" id="modifySubBtn" type="button" value="提交"/>
+        <input
+                class="btn btn-danger"
+                data-dismiss="modal"
+                type="button"
+                value="关闭"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 修改线路信息模态框结束 -->
+
+<div class="container-fluid mx-auto d-grid">
+  <div class="page-header m-4">
+    <h3>线路信息管理</h3>
+  </div>
+  <hr/>
+  <div class="">
+    <div class="row">
+      <div class="col-md-2">
+        <input
+                class="btn btn-primary"
+                data-backdrop="static"
+                data-target="#add_modal"
+                data-toggle="modal"
+                type="button"
+                value="添加新线路"
+        />
+      </div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <input
+                    aria-label="default input example"
+                    class="form-control"
+                    id="searchPath"
+                    placeholder="请输入线路名"
+                    type="search"
+            />
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="searchPathBtn" type="button" value="搜索"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
+        <div class="row mb-2">
+          <div class="col-md-10">
+            <input
+                    aria-label="default input example"
+                    class="form-control"
+                    id="searchMsg"
+                    placeholder="请输入起点/终点/途径地名"
+                    type="search"
+            />
+          </div>
+          <div class="col-md-2">
+            <input class="btn btn-primary" id="searchMsgBtn" type="button" value="搜索"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th>线路名</th>
+        <th>起始地</th>
+        <th>终点地</th>
+        <th>途径地</th>
+        <th>线路费用</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="tbody">
+      <span id="noFindInfo"></span>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //页面加载发送请求，写入数据
+        $.ajax({
+            url: "/paths/queryPaths",
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#tbody').empty();
+                for (let paths of data) {
+                    let td;
+                    td = '<td>' + paths.id + '</td>' +
+                        '<td>' + paths.path + '</td>' +
+                        '<td>' + paths.path_start + '</td>' +
+                        '<td>' + paths.path_end + '</td>' +
+                        '<td>' + paths.path_way + '</td>' +
+                        '<td>' + paths.path_money + '</td>' +
+                        '<td><button class="btn btn-success modifyPathsBtn " data-backdrop="static"' +
+                        ' data-toggle="modal" data-target="#modify_modal">修改</button>&nbsp;&nbsp;' +
+                        '<button class="btn btn-danger">删除</button></td>';
+                    $('#tbody').append('<tr>' + td + '</tr>');
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+
+        //点击添加路线模态提交按钮，进行事件提交
+        $('#addBtn').on('click', function () {
+            $.ajax({
+                url: "paths/addPaths",
+                type: "post",
+                data: {
+                    path: $('#path').val(),
+                    path_start: $('#path_start').val(),
+                    path_end: $('#path_end').val(),
+                    path_way: $('#path_way').val(),
+                    path_money: $('#path_money').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert("添加成功");
+                        $('#add_modal').modal('hide');
+                        $(location).attr('href', 'paths.html');
+                    } else {
+                        alert("添加失败");
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击搜索路线名按钮，进行条件查找
+        $('#searchPathBtn').on('click', function () {
+            $.ajax({
+                url: "paths/searchPathsBypath",
+                type: "post",
+                data: {
+                    path: $('#searchPath').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindInfo').empty();
+                    if (data.length == 0) {
+                        $('#noFindInfo').text('没有符合条件的信息');
+                    } else {
+                        for (let paths of data) {
+                            let td;
+                            td = '<td>' + paths.id + '</td>' +
+                                '<td>' + paths.path + '</td>' +
+                                '<td>' + paths.path_start + '</td>' +
+                                '<td>' + paths.path_end + '</td>' +
+                                '<td>' + paths.path_way + '</td>' +
+                                '<td>' + paths.path_money + '</td>' +
+                                '<td><button class="btn btn-success modifyPathsBtn" data-backdrop="static"' +
+                                ' data-toggle="modal" data-target="#modify_modal">修改</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-danger">删除</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击搜索起始地、终止地、途径地，进行事件提交
+        $('#searchMsgBtn').on('click', function () {
+            $.ajax({
+                url: "/paths/searchPathsByMsg",
+                type: "post",
+                data: {
+                    searchMsg: $('#searchMsg').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#tbody').empty();
+                    $('#noFindInfo').empty();
+                    if (data.length == 0) {
+                        $('#noFindInfo').text('没有符合条件的信息');
+                    } else {
+                        for (let paths of data) {
+                            let td;
+                            td = '<td>' + paths.id + '</td>' +
+                                '<td>' + paths.path + '</td>' +
+                                '<td>' + paths.path_start + '</td>' +
+                                '<td>' + paths.path_end + '</td>' +
+                                '<td>' + paths.path_way + '</td>' +
+                                '<td>' + paths.path_money + '</td>' +
+                                '<td><button class="btn btn-success modifyPathsBtn" data-backdrop="static"' +
+                                ' data-toggle="modal" data-target="#modify_modal">修改</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-danger">删除</button></td>';
+                            $('#tbody').append('<tr>' + td + '</tr>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //获取当前行的id,根据id查询车辆信息，回写到修改模态中
+        $(document).on('click', '.modifyPathsBtn', function () {
+            let id = $(this).parents('tr').find('td:first').text()
+            $.ajax({
+                url: "/paths/queryPathsById",
+                type: "post",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#modify_id').val(data.id);
+                    $('#modify_path').val(data.path);
+                    $('#modify_path_start').val(data.path_start);
+                    $('#modify_path_end').val(data.path_end);
+                    $('#modify_path_way').val(data.path_way);
+                    $('#modify_path_money').val(data.path_money);
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+
+        //点击修改模态的提交按钮，将修改后的路线信息提交到数据库
+        $('#modifySubBtn').on('click', function () {
+            $.ajax({
+                url: "/paths/modifyPaths",
+                type: "post",
+                data: {
+                    id: $('#modify_id').val(),
+                    path: $('#modify_path').val(),
+                    path_start: $('#modify_path_start').val(),
+                    path_end: $('#modify_path_end').val(),
+                    path_way: $('#modify_path_way').val(),
+                    path_money: $('#modify_path_money').val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.includes('true')) {
+                        alert('修改成功')
+                        $('#modify_modal').modal('hide')
+                        $(location).attr('href', 'paths.html')
+                    } else {
+                        alert('修改失败')
+                    }
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
